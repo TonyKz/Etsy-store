@@ -3,776 +3,287 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Etsy Listing Optimizer · ForgeAI Studio</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:wght@300;400;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Etsy Listing Optimizer · CyberStorm Technology</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
+
+/* ══════════════════════════════════════════════
+   DARK THEME (default)
+══════════════════════════════════════════════ */
+:root {
+  --bg:            #050B14;
+  --bg2:           #080F1C;
+  --bg3:           #0D1B2E;
+  --surface:       rgba(255,255,255,0.04);
+  --surface2:      rgba(255,255,255,0.07);
+  --surface3:      rgba(255,255,255,0.10);
+  --border:        rgba(255,255,255,0.08);
+  --border-accent: rgba(0,210,255,0.25);
+  --cyan:          #00D2FF;
+  --cyan-glow:     rgba(0,210,255,0.15);
+  --cyan-glow2:    rgba(0,210,255,0.08);
+  --mint:          #00FFB2;
+  --mint-dim:      rgba(0,255,178,0.12);
+  --coral:         #FF4D6D;
+  --coral-dim:     rgba(255,77,109,0.15);
+  --amber:         #FFB347;
+  --amber-dim:     rgba(255,179,71,0.10);
+  --text-primary:  #F0F4F8;
+  --text-secondary:#94A3B8;
+  --text-muted:    #475569;
+  --text-on-accent:#050B14;
+  --result-bg:     rgba(8,15,28,0.94);
+  --header-bg:     rgba(5,11,20,0.88);
+  --intro-bg:      linear-gradient(135deg,rgba(0,210,255,0.08),rgba(0,255,178,0.05));
+  --intro-border:  rgba(0,210,255,0.15);
+  --card-shadow:   0 8px 32px rgba(0,0,0,0.4);
+  --result-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  --gate-bg:       rgba(8,15,28,0.97);
+  --mesh1:         rgba(0,210,255,0.08);
+  --mesh2:         rgba(0,255,178,0.06);
+  --grid-line:     rgba(255,255,255,0.015);
+  --scrollbar:     #1E293B;
+  --select-opt:    #0D1B2E;
+  --tip-bg:        rgba(255,179,71,0.06);
+  --tip-border:    rgba(255,179,71,0.15);
+  --upgrade-bg:    linear-gradient(135deg,rgba(0,210,255,0.08) 0%,rgba(0,255,178,0.05) 50%,rgba(0,210,255,0.04) 100%);
+  --upgrade-border:rgba(0,210,255,0.18);
+  --footer-color:  #475569;
+}
+
+/* ══════════════════════════════════════════════
+   LIGHT THEME
+══════════════════════════════════════════════ */
+@media (prefers-color-scheme: light) {
   :root {
-    --kraft:       #C4935A;
-    --kraft-light: #E8D5B0;
-    --kraft-pale:  #F5ECD8;
-    --kraft-dark:  #8B5E2A;
-    --brown-deep:  #2C1A0A;
-    --brown-mid:   #5C3418;
-    --cream:       #FBF5E6;
-    --cream-dark:  #F0E4C8;
-    --gold:        #A07820;
-    --gold-light:  #D4A830;
-    --rust:        #8B3820;
-    --rust-light:  #C45A30;
-    --sage:        #3D5C30;
-    --sage-light:  #6B8C50;
-    --ink:         #1A0E06;
-    --shadow:      rgba(44,26,10,0.15);
-  }
-
-  /* ── Password Gate ── */
-  #gate {
-    position: fixed;
-    inset: 0;
-    background: #0D1B2A;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    font-family: 'Source Serif 4', Georgia, serif;
-  }
-
-  #gate::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image:
-      url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-  }
-
-  #gate::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: radial-gradient(circle, #1A3050 1px, transparent 1px);
-    background-size: 32px 32px;
-    pointer-events: none;
-    opacity: 0.6;
-  }
-
-  .gate-card {
-    position: relative;
-    z-index: 1;
-    background: #1B2B3B;
-    border: 1px solid #253545;
-    border-top: 3px solid #00C2FF;
-    border-radius: 12px;
-    padding: 48px 44px 40px;
-    width: 100%;
-    max-width: 420px;
-    box-shadow: 0 24px 60px rgba(0,0,0,0.5);
-    animation: gateIn 0.4s ease both;
-  }
-
-  @keyframes gateIn {
-    from { opacity: 0; transform: translateY(20px) scale(0.97); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
-  }
-
-  .gate-brand {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: #00C2FF;
-    margin-bottom: 6px;
-  }
-
-  .gate-title {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 26px;
-    font-weight: 700;
-    color: #FFFFFF;
-    line-height: 1.2;
-    margin-bottom: 6px;
-  }
-
-  .gate-title em {
-    color: #00C2FF;
-    font-style: italic;
-  }
-
-  .gate-sub {
-    font-size: 13px;
-    color: #8A9BB0;
-    margin-bottom: 32px;
-    line-height: 1.5;
-  }
-
-  .gate-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: #8A9BB0;
-    display: block;
-    margin-bottom: 8px;
-  }
-
-  .gate-input-wrap {
-    position: relative;
-    margin-bottom: 14px;
-  }
-
-  #gate-input {
-    width: 100%;
-    background: #0D1B2A;
-    border: 1.5px solid #253545;
-    border-radius: 6px;
-    padding: 13px 48px 13px 16px;
-    font-family: 'DM Mono', monospace;
-    font-size: 14px;
-    font-weight: 500;
-    color: #FFFFFF;
-    letter-spacing: 0.12em;
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    -webkit-appearance: none;
-  }
-
-  #gate-input::placeholder {
-    color: #2E4057;
-    letter-spacing: 0.08em;
-  }
-
-  #gate-input:focus {
-    border-color: #00C2FF;
-    box-shadow: 0 0 0 3px rgba(0,194,255,0.12);
-  }
-
-  #gate-input.error {
-    border-color: #FF6B6B;
-    box-shadow: 0 0 0 3px rgba(255,107,107,0.12);
-    animation: shake 0.35s ease;
-  }
-
-  @keyframes shake {
-    0%,100% { transform: translateX(0); }
-    20%      { transform: translateX(-6px); }
-    40%      { transform: translateX(6px); }
-    60%      { transform: translateX(-4px); }
-    80%      { transform: translateX(4px); }
-  }
-
-  .gate-eye {
-    position: absolute;
-    right: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    color: #4A6080;
-    font-size: 16px;
-    line-height: 1;
-    user-select: none;
-    transition: color 0.15s;
-  }
-
-  .gate-eye:hover { color: #8A9BB0; }
-
-  .gate-error {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: #FF6B6B;
-    min-height: 16px;
-    margin-bottom: 16px;
-    letter-spacing: 0.05em;
-    transition: opacity 0.2s;
-  }
-
-  #gate-btn {
-    width: 100%;
-    background: #00C2FF;
-    color: #0D1B2A;
-    border: none;
-    border-radius: 6px;
-    padding: 13px;
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.15s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-  }
-
-  #gate-btn:hover {
-    background: #33CFFF;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 16px rgba(0,194,255,0.3);
-  }
-
-  #gate-btn:active { transform: translateY(0); }
-
-  #gate-btn.unlocking {
-    background: #00E5A0;
-    pointer-events: none;
-  }
-
-  .gate-footer {
-    margin-top: 24px;
-    padding-top: 20px;
-    border-top: 1px solid #1E3048;
-    font-size: 11px;
-    color: #4A6080;
-    text-align: center;
-    line-height: 1.6;
-  }
-
-  .gate-footer a {
-    color: #00C2FF;
-    text-decoration: none;
-  }
-
-  #gate.unlocking-anim {
-    animation: gateOut 0.5s 0.3s ease both;
-  }
-
-  @keyframes gateOut {
-    from { opacity: 1; }
-    to   { opacity: 0; pointer-events: none; }
-  }
-
-  #app { display: none; }
-
-  /* ── Rest of app styles ── */
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'Source Serif 4', Georgia, serif;
-    background: var(--cream);
-    color: var(--brown-deep);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  header {
-    background: var(--brown-deep);
-    border-bottom: 3px solid var(--gold);
-    padding: 0;
-    position: relative;
-    overflow: hidden;
-  }
-
-  header::after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: 0; right: 0;
-    height: 4px;
-    background: repeating-linear-gradient(
-      90deg,
-      var(--gold) 0px, var(--gold) 8px,
-      transparent 8px, transparent 12px
-    );
-  }
-
-  .header-inner {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 28px 24px 22px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-
-  .brand { display: flex; flex-direction: column; gap: 2px; }
-
-  .brand-name {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--gold-light);
-  }
-
-  .brand-title {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 26px;
-    font-weight: 700;
-    color: var(--cream);
-    line-height: 1.1;
-  }
-
-  .brand-title em { color: var(--gold-light); font-style: italic; }
-
-  .header-badges { display: flex; gap: 8px; flex-wrap: wrap; }
-
-  .badge {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    padding: 4px 10px;
-    border-radius: 3px;
-    text-transform: uppercase;
-  }
-
-  .badge-sage { background: var(--sage); color: #C8E0B0; }
-  .badge-rust { background: var(--rust); color: #F0C0A0; }
-  .badge-gold { background: var(--gold); color: #FFF3C0; }
-
-  main {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 32px 20px 60px;
-    position: relative;
-    z-index: 1;
-  }
-
-  .intro {
-    background: var(--kraft-pale);
-    border: 1px solid var(--kraft-light);
-    border-left: 4px solid var(--kraft);
-    border-radius: 4px;
-    padding: 16px 20px;
-    margin-bottom: 32px;
-    font-size: 14px;
-    color: var(--brown-mid);
-    line-height: 1.6;
-  }
-
-  .intro strong { color: var(--brown-deep); }
-
-  .section-card {
-    background: white;
-    border: 1px solid var(--kraft-light);
-    border-radius: 6px;
-    margin-bottom: 24px;
-    overflow: hidden;
-    box-shadow: 0 2px 12px var(--shadow);
-    animation: fadeUp 0.4s ease both;
-  }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  .section-card:nth-child(2) { animation-delay: 0.05s; }
-  .section-card:nth-child(3) { animation-delay: 0.10s; }
-  .section-card:nth-child(4) { animation-delay: 0.15s; }
-
-  .section-header {
-    padding: 14px 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    user-select: none;
-    transition: background 0.2s;
-  }
-
-  .section-header:hover { background: var(--kraft-pale); }
-  .section-header.active { background: var(--brown-deep); }
-  .section-header.active .section-title { color: var(--cream); }
-  .section-header.active .section-icon { color: var(--gold-light); }
-  .section-header.active .section-num { background: var(--gold); color: var(--brown-deep); }
-  .section-header.active .section-chevron { color: var(--kraft-light); transform: rotate(180deg); }
-
-  .section-num {
-    width: 26px; height: 26px;
-    background: var(--kraft-light);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--kraft-dark);
-    flex-shrink: 0;
-    transition: all 0.2s;
-  }
-
-  .section-icon { font-size: 16px; color: var(--kraft); transition: color 0.2s; }
-
-  .section-title {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--brown-deep);
-    flex: 1;
-    transition: color 0.2s;
-  }
-
-  .section-chevron { color: var(--kraft); font-size: 14px; transition: transform 0.25s ease, color 0.2s; }
-
-  .section-body { display: none; border-top: 1px solid var(--kraft-light); }
-  .section-body.open { display: block; }
-
-  .fields {
-    padding: 20px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
-
-  @media (max-width: 600px) { .fields { grid-template-columns: 1fr; } }
-
-  .field { display: flex; flex-direction: column; gap: 6px; }
-  .field.full { grid-column: 1 / -1; }
-
-  label {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--kraft-dark);
-  }
-
-  select, input[type="text"], textarea {
-    font-family: 'Source Serif 4', Georgia, serif;
-    font-size: 13.5px;
-    color: var(--brown-deep);
-    background: var(--cream);
-    border: 1px solid var(--kraft-light);
-    border-radius: 4px;
-    padding: 9px 12px;
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    width: 100%;
-    appearance: none;
-    -webkit-appearance: none;
-  }
-
-  select {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238B5E2A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    padding-right: 32px;
-    cursor: pointer;
-  }
-
-  select:focus, input:focus, textarea:focus {
-    border-color: var(--kraft);
-    box-shadow: 0 0 0 3px rgba(196,147,90,0.15);
-  }
-
-  textarea { resize: vertical; min-height: 70px; line-height: 1.5; }
-
-  .result-section {
-    background: var(--brown-deep);
-    border-radius: 6px;
-    overflow: hidden;
-    box-shadow: 0 4px 20px var(--shadow);
-    margin-bottom: 20px;
-    animation: fadeUp 0.4s 0.2s ease both;
-    position: sticky;
-    bottom: 20px;
-  }
-
-  .result-header {
-    padding: 14px 20px;
-    background: var(--gold);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-  }
-
-  .result-label {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--brown-deep);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .result-label span { font-size: 16px; }
-
-  .platform-pills { display: flex; gap: 5px; flex-wrap: wrap; }
-
-  .pill {
-    font-family: 'DM Mono', monospace;
-    font-size: 9px;
-    font-weight: 500;
-    padding: 2px 7px;
-    border-radius: 20px;
-    background: rgba(44,26,10,0.2);
-    color: var(--brown-deep);
-    letter-spacing: 0.05em;
-  }
-
-  .result-body { padding: 20px; }
-
-  #prompt-output {
-    font-family: 'Source Serif 4', Georgia, serif;
-    font-size: 14px;
-    line-height: 1.75;
-    color: var(--kraft-light);
-    min-height: 100px;
-    white-space: pre-wrap;
-    word-break: break-word;
-  }
-
-  #prompt-output .placeholder { color: var(--kraft-dark); font-style: italic; font-size: 13px; }
-  #prompt-output .var-highlight {
-    color: var(--gold-light);
-    font-weight: 600;
-    background: rgba(212,168,48,0.12);
-    border-radius: 2px;
-    padding: 0 2px;
-  }
-
-  .result-footer {
-    padding: 12px 20px;
-    border-top: 1px solid rgba(196,147,90,0.2);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-
-  .char-count { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--kraft-dark); }
-
-  .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
-
-  .btn {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.15s;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .btn-copy { background: var(--gold-light); color: var(--brown-deep); }
-  .btn-copy:hover { background: var(--gold); transform: translateY(-1px); }
-  .btn-copy:active { transform: translateY(0); }
-  .btn-copy.copied { background: var(--sage); color: #C8E0B0; }
-
-  .btn-reset {
-    background: rgba(196,147,90,0.15);
-    color: var(--kraft-light);
-    border: 1px solid rgba(196,147,90,0.25);
-  }
-  .btn-reset:hover { background: rgba(196,147,90,0.25); }
-
-  .btn-random { background: rgba(139,56,32,0.6); color: #F0C0A0; border: 1px solid rgba(139,56,32,0.3); }
-  .btn-random:hover { background: var(--rust); }
-
-  .presets-row { margin-bottom: 24px; animation: fadeUp 0.4s 0.05s ease both; }
-
-  .presets-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--kraft-dark);
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .presets-label::after { content: ''; flex: 1; height: 1px; background: var(--kraft-light); }
-
-  .presets-list { display: flex; gap: 8px; flex-wrap: wrap; }
-
-  .preset-btn {
-    font-family: 'Source Serif 4', Georgia, serif;
-    font-size: 12.5px;
-    padding: 7px 14px;
-    border-radius: 4px;
-    border: 1px solid var(--kraft-light);
-    background: white;
-    color: var(--brown-mid);
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-
-  .preset-btn:hover {
-    border-color: var(--kraft);
-    background: var(--kraft-pale);
-    color: var(--brown-deep);
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px var(--shadow);
-  }
-
-  .tip-box {
-    background: var(--kraft-pale);
-    border: 1px solid var(--kraft-light);
-    border-left: 3px solid var(--rust-light);
-    border-radius: 4px;
-    padding: 12px 16px;
-    margin: 0 20px 20px;
-    font-size: 12.5px;
-    color: var(--brown-mid);
-    line-height: 1.6;
-  }
-
-  .tip-box strong { color: var(--rust); }
-
-  .upgrade-banner {
-    background: linear-gradient(135deg, var(--sage) 0%, var(--sage-light) 100%);
-    border-radius: 6px;
-    padding: 20px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    flex-wrap: wrap;
-    animation: fadeUp 0.4s 0.25s ease both;
-  }
-
-  .upgrade-text h3 {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 16px;
-    font-weight: 700;
-    color: white;
-    margin-bottom: 4px;
-  }
-
-  .upgrade-text p { font-size: 12.5px; color: rgba(255,255,255,0.75); line-height: 1.5; }
-  .upgrade-text p strong { color: rgba(255,255,255,0.95); }
-
-  .btn-upgrade {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 10px 20px;
-    background: white;
-    color: var(--sage);
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: all 0.15s;
-    text-decoration: none;
-    display: inline-block;
-  }
-
-  .btn-upgrade:hover { background: var(--cream); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-
-  footer {
-    text-align: center;
-    padding: 24px;
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.08em;
-    color: var(--kraft-dark);
-    border-top: 1px solid var(--kraft-light);
-    margin-top: 40px;
-  }
-
-  .toast {
-    position: fixed;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%) translateY(60px);
-    background: var(--sage);
-    color: white;
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    font-weight: 500;
-    padding: 10px 20px;
-    border-radius: 4px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-    transition: transform 0.3s ease;
-    z-index: 1000;
-    letter-spacing: 0.05em;
-  }
-
-  .toast.show { transform: translateX(-50%) translateY(0); }
-
-  ::-webkit-scrollbar { width: 8px; }
-  ::-webkit-scrollbar-track { background: var(--cream-dark); }
-  ::-webkit-scrollbar-thumb { background: var(--kraft-light); border-radius: 4px; }
-  ::-webkit-scrollbar-thumb:hover { background: var(--kraft); }
+    --bg:            #F0F6FF;
+    --bg2:           #E8F0FB;
+    --bg3:           #FFFFFF;
+    --surface:       rgba(255,255,255,0.85);
+    --surface2:      rgba(255,255,255,0.95);
+    --surface3:      rgba(255,255,255,1.0);
+    --border:        rgba(0,60,120,0.10);
+    --border-accent: rgba(0,150,210,0.30);
+    --cyan:          #0088CC;
+    --cyan-glow:     rgba(0,136,204,0.15);
+    --cyan-glow2:    rgba(0,136,204,0.06);
+    --mint:          #00A878;
+    --mint-dim:      rgba(0,168,120,0.10);
+    --coral:         #E03050;
+    --coral-dim:     rgba(224,48,80,0.10);
+    --amber:         #C07800;
+    --amber-dim:     rgba(192,120,0,0.08);
+    --text-primary:  #0D1B2E;
+    --text-secondary:#334E6E;
+    --text-muted:    #7090B0;
+    --text-on-accent:#FFFFFF;
+    --result-bg:     rgba(255,255,255,0.97);
+    --header-bg:     rgba(240,246,255,0.92);
+    --intro-bg:      linear-gradient(135deg,rgba(0,136,204,0.07),rgba(0,168,120,0.05));
+    --intro-border:  rgba(0,136,204,0.18);
+    --card-shadow:   0 4px 20px rgba(0,60,120,0.08);
+    --result-shadow: 0 8px 40px rgba(0,60,120,0.12);
+    --gate-bg:       rgba(255,255,255,0.98);
+    --mesh1:         rgba(0,136,204,0.06);
+    --mesh2:         rgba(0,168,120,0.04);
+    --grid-line:     rgba(0,60,120,0.04);
+    --scrollbar:     #C8D8EE;
+    --select-opt:    #FFFFFF;
+    --tip-bg:        rgba(192,120,0,0.05);
+    --tip-border:    rgba(192,120,0,0.15);
+    --upgrade-bg:    linear-gradient(135deg,rgba(0,136,204,0.07) 0%,rgba(0,168,120,0.05) 50%,rgba(0,136,204,0.04) 100%);
+    --upgrade-border:rgba(0,136,204,0.20);
+    --footer-color:  #7090B0;
+  }
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text-primary);min-height:100vh;overflow-x:hidden;transition:background 0.3s,color 0.3s;}
+
+.bg-mesh{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.bg-mesh::before{content:'';position:absolute;width:800px;height:800px;top:-200px;right:-200px;background:radial-gradient(circle,var(--mesh1) 0%,transparent 70%);animation:drift1 12s ease-in-out infinite alternate;}
+.bg-mesh::after{content:'';position:absolute;width:600px;height:600px;bottom:-100px;left:-100px;background:radial-gradient(circle,var(--mesh2) 0%,transparent 70%);animation:drift2 15s ease-in-out infinite alternate;}
+.bg-mesh-mid{position:fixed;width:500px;height:500px;top:40%;left:40%;transform:translate(-50%,-50%);background:radial-gradient(circle,var(--mesh1) 0%,transparent 70%);animation:drift3 18s ease-in-out infinite alternate;pointer-events:none;z-index:0;}
+@keyframes drift1{from{transform:translate(0,0) scale(1);}to{transform:translate(-60px,40px) scale(1.1);}}
+@keyframes drift2{from{transform:translate(0,0) scale(1);}to{transform:translate(40px,-60px) scale(1.15);}}
+@keyframes drift3{from{transform:translate(-50%,-50%) scale(1);}to{transform:translate(-50%,-50%) scale(1.2);}}
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--grid-line) 1px,transparent 1px),linear-gradient(90deg,var(--grid-line) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+
+/* GATE */
+#gate{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px;}
+.gate-card{position:relative;z-index:1;background:var(--gate-bg);border:1px solid var(--border-accent);border-radius:20px;padding:52px 48px 44px;width:100%;max-width:440px;box-shadow:0 0 0 1px var(--cyan-glow2),0 32px 80px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.06);animation:gateIn 0.5s cubic-bezier(0.16,1,0.3,1) both;overflow:hidden;}
+.gate-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),var(--mint),transparent);background-size:200% 100%;animation:shimmer 3s linear infinite;}
+@keyframes shimmer{from{background-position:-200% 0;}to{background-position:200% 0;}}
+@keyframes gateIn{from{opacity:0;transform:translateY(30px) scale(0.95);}to{opacity:1;transform:translateY(0) scale(1);}}
+.gate-logo{display:flex;align-items:center;gap:10px;margin-bottom:28px;}
+.gate-logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--cyan),var(--mint));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:var(--bg);font-family:'Syne',sans-serif;box-shadow:0 4px 16px var(--cyan-glow);}
+.gate-logo-text{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);}
+.gate-heading{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--text-primary);line-height:1.15;margin-bottom:8px;}
+.gate-heading span{background:linear-gradient(90deg,var(--cyan),var(--mint));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.gate-sub{font-size:13.5px;color:var(--text-secondary);line-height:1.6;margin-bottom:36px;}
+.gate-field-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:8px;}
+.gate-input-wrap{position:relative;margin-bottom:10px;}
+#gate-input{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:14px 48px 14px 18px;font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:500;color:var(--text-primary);letter-spacing:0.15em;outline:none;transition:all 0.2s;}
+#gate-input::placeholder{color:var(--text-muted);letter-spacing:0.08em;}
+#gate-input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px var(--cyan-glow);}
+#gate-input.error{border-color:var(--coral);box-shadow:0 0 0 3px var(--coral-dim);animation:shake 0.4s ease;}
+@keyframes shake{0%,100%{transform:translateX(0);}20%{transform:translateX(-8px);}40%{transform:translateX(8px);}60%{transform:translateX(-5px);}80%{transform:translateX(5px);}}
+.gate-eye{position:absolute;right:16px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--text-muted);font-size:15px;user-select:none;transition:color 0.15s;line-height:1;}
+.gate-eye:hover{color:var(--text-secondary);}
+.gate-error{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--coral);min-height:18px;margin-bottom:16px;letter-spacing:0.04em;}
+#gate-btn{width:100%;background:linear-gradient(135deg,var(--cyan) 0%,var(--mint) 100%);color:var(--text-on-accent);border:none;border-radius:10px;padding:15px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;transition:all 0.2s;}
+#gate-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px var(--cyan-glow);}
+#gate-btn.unlocking{background:linear-gradient(135deg,var(--mint),var(--cyan));}
+.gate-footer{margin-top:24px;padding-top:20px;border-top:1px solid var(--border);font-size:11.5px;color:var(--text-muted);text-align:center;line-height:1.7;}
+.gate-footer a{color:var(--cyan);text-decoration:none;}
+#gate.fade-out{animation:fadeOut 0.5s ease forwards;}
+@keyframes fadeOut{to{opacity:0;pointer-events:none;}}
+#app{display:none;position:relative;z-index:1;}
+
+/* HEADER */
+.header{position:sticky;top:0;z-index:100;background:var(--header-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 24px;}
+.header-inner{max-width:1000px;margin:0 auto;height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.header-logo{display:flex;align-items:center;gap:12px;}
+.logo-mark{width:34px;height:34px;background:linear-gradient(135deg,var(--cyan),var(--mint));border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--text-on-accent);flex-shrink:0;box-shadow:0 0 20px var(--cyan-glow);}
+.logo-info{display:flex;flex-direction:column;gap:1px;}
+.logo-brand{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);line-height:1;}
+.logo-product{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text-primary);line-height:1.2;}
+.header-badges{display:flex;gap:6px;flex-wrap:wrap;}
+.hbadge{font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:500;letter-spacing:0.08em;padding:4px 10px;border-radius:20px;text-transform:uppercase;}
+.hbadge-cyan{background:var(--cyan-glow2);color:var(--cyan);border:1px solid var(--border-accent);}
+.hbadge-mint{background:var(--mint-dim);color:var(--mint);border:1px solid rgba(0,255,178,0.2);}
+.hbadge-amber{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(255,179,71,0.2);}
+
+/* MAIN */
+main{max-width:1000px;margin:0 auto;padding:36px 24px 80px;}
+.intro-strip{background:var(--intro-bg);border:1px solid var(--intro-border);border-radius:12px;padding:16px 20px;margin-bottom:32px;font-size:13.5px;color:var(--text-secondary);line-height:1.65;display:flex;align-items:flex-start;gap:12px;}
+.intro-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
+.intro-strip strong{color:var(--cyan);font-weight:600;}
+
+.presets-section{margin-bottom:28px;}
+.presets-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.presets-label::after{content:'';flex:1;height:1px;background:var(--border);}
+.presets-list{display:flex;gap:8px;flex-wrap:wrap;}
+.preset-btn{font-family:'Inter',sans-serif;font-size:12.5px;font-weight:500;padding:7px 16px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text-secondary);cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:6px;white-space:nowrap;}
+.preset-btn:hover{border-color:var(--border-accent);background:var(--cyan-glow2);color:var(--text-primary);transform:translateY(-1px);box-shadow:var(--card-shadow);}
+
+.section-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;margin-bottom:16px;overflow:hidden;transition:border-color 0.2s,box-shadow 0.2s;animation:slideUp 0.4s cubic-bezier(0.16,1,0.3,1) both;box-shadow:var(--card-shadow);}
+@keyframes slideUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+.section-card:nth-child(1){animation-delay:0.05s;}.section-card:nth-child(2){animation-delay:0.10s;}.section-card:nth-child(3){animation-delay:0.15s;}
+.section-card.is-open{border-color:var(--border-accent);box-shadow:0 0 0 1px var(--cyan-glow2),var(--card-shadow);}
+.section-header{padding:18px 22px;display:flex;align-items:center;gap:14px;cursor:pointer;user-select:none;transition:background 0.15s;}
+.section-header:hover{background:var(--surface2);}
+.section-num{width:28px;height:28px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:var(--text-muted);flex-shrink:0;transition:all 0.2s;}
+.section-header.active .section-num{background:linear-gradient(135deg,var(--cyan),var(--mint));border-color:transparent;color:var(--text-on-accent);font-weight:700;box-shadow:0 0 16px var(--cyan-glow);}
+.section-icon{font-size:15px;color:var(--text-muted);transition:color 0.2s;flex-shrink:0;}
+.section-header.active .section-icon{color:var(--cyan);}
+.section-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:600;color:var(--text-secondary);flex:1;transition:color 0.2s;}
+.section-header.active .section-title{color:var(--text-primary);}
+.section-chevron{color:var(--text-muted);font-size:12px;transition:transform 0.25s ease,color 0.2s;}
+.section-header.active .section-chevron{transform:rotate(180deg);color:var(--cyan);}
+.section-body{display:none;border-top:1px solid var(--border);}
+.section-body.open{display:block;}
+
+.fields{padding:22px;display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+@media(max-width:600px){.fields{grid-template-columns:1fr;}}
+.field{display:flex;flex-direction:column;gap:8px;}
+.field.full{grid-column:1/-1;}
+.field label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);}
+select,input[type="text"],textarea{font-family:'Inter',sans-serif;font-size:13.5px;color:var(--text-primary);background:var(--surface2);border:1.5px solid var(--border);border-radius:9px;padding:11px 14px;outline:none;transition:all 0.2s;width:100%;appearance:none;-webkit-appearance:none;}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2300D2FF' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;cursor:pointer;}
+@media(prefers-color-scheme:light){select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230088CC' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");}}
+select option{background:var(--select-opt);color:var(--text-primary);}
+select:focus,input:focus,textarea:focus{border-color:var(--cyan);box-shadow:0 0 0 3px var(--cyan-glow);color:var(--text-primary);}
+textarea{resize:vertical;min-height:80px;line-height:1.6;}
+
+.tip-box{margin:0 22px 22px;padding:12px 16px;background:var(--tip-bg);border:1px solid var(--tip-border);border-left:3px solid var(--amber);border-radius:8px;font-size:12.5px;color:var(--text-secondary);line-height:1.65;}
+.tip-box strong{color:var(--amber);font-weight:600;}
+
+.result-section{background:var(--result-bg);border:1px solid var(--border-accent);border-radius:14px;overflow:hidden;margin-bottom:20px;position:sticky;bottom:20px;box-shadow:0 0 0 1px var(--cyan-glow2),var(--result-shadow),inset 0 1px 0 rgba(255,255,255,0.04);animation:slideUp 0.4s 0.2s cubic-bezier(0.16,1,0.3,1) both;}
+.result-header{padding:14px 20px;background:linear-gradient(90deg,var(--cyan-glow2),var(--mint-dim));border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.result-label{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--text-primary);display:flex;align-items:center;gap:8px;}
+.result-dot{width:8px;height:8px;border-radius:50%;background:var(--mint);box-shadow:0 0 8px var(--mint);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.6;transform:scale(0.85);}}
+.platform-pills{display:flex;gap:5px;flex-wrap:wrap;}
+.ppill{font-family:'JetBrains Mono',monospace;font-size:8.5px;font-weight:500;padding:3px 8px;border-radius:20px;background:var(--surface);color:var(--text-secondary);border:1px solid var(--border);letter-spacing:0.04em;}
+.result-body{padding:20px 22px;min-height:110px;}
+#prompt-output{font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.8;color:var(--text-primary);white-space:pre-wrap;word-break:break-word;}
+.placeholder-text{color:var(--text-muted);font-family:'Inter',sans-serif;font-size:13px;font-style:italic;}
+.var-hl{color:var(--cyan);background:var(--cyan-glow2);border-radius:3px;padding:0 3px;}
+.result-footer{padding:13px 20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:var(--surface);}
+.char-count{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:0.04em;}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;}
+.btn{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:9px 18px;border:none;border-radius:8px;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:6px;}
+.btn-copy{background:linear-gradient(135deg,var(--cyan),var(--mint));color:var(--text-on-accent);}
+.btn-copy:hover{transform:translateY(-1px);box-shadow:0 6px 24px var(--cyan-glow);}
+.btn-copy.copied{background:linear-gradient(135deg,var(--mint),var(--cyan));}
+.btn-reset{background:var(--surface2);color:var(--text-secondary);border:1px solid var(--border);}
+.btn-reset:hover{background:var(--surface3);color:var(--text-primary);}
+.btn-random{background:var(--coral-dim);color:var(--coral);border:1px solid rgba(255,77,109,0.2);}
+.btn-random:hover{background:rgba(255,77,109,0.2);transform:translateY(-1px);}
+
+.upgrade-banner{background:var(--upgrade-bg);border:1px solid var(--upgrade-border);border-radius:14px;padding:24px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;animation:slideUp 0.4s 0.25s cubic-bezier(0.16,1,0.3,1) both;position:relative;overflow:hidden;box-shadow:var(--card-shadow);}
+.upgrade-banner::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:radial-gradient(circle,var(--cyan-glow2),transparent 70%);pointer-events:none;}
+.upgrade-text h3{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text-primary);margin-bottom:5px;}
+.upgrade-text p{font-size:13px;color:var(--text-secondary);line-height:1.55;max-width:480px;}
+.upgrade-text p strong{color:var(--cyan);font-weight:600;}
+.btn-upgrade{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:12px 24px;background:linear-gradient(135deg,var(--cyan),var(--mint));color:var(--text-on-accent);border:none;border-radius:9px;cursor:pointer;white-space:nowrap;transition:all 0.15s;text-decoration:none;display:inline-block;}
+.btn-upgrade:hover{transform:translateY(-2px);box-shadow:0 8px 28px var(--cyan-glow);}
+
+.site-footer{text-align:center;padding:28px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;color:var(--footer-color);border-top:1px solid var(--border);margin-top:48px;}
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--mint-dim);border:1px solid rgba(0,255,178,0.3);color:var(--mint);font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;padding:12px 24px;border-radius:10px;box-shadow:var(--card-shadow);transition:transform 0.35s cubic-bezier(0.16,1,0.3,1);z-index:999;backdrop-filter:blur(10px);white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:var(--bg2);}::-webkit-scrollbar-thumb{background:var(--scrollbar);border-radius:3px;}
 </style>
 </head>
 <body>
+<div class="bg-mesh"></div>
+<div class="bg-mesh-mid"></div>
 
-<!-- ── Password Gate ── -->
 <div id="gate">
+  <div class="bg-mesh"></div>
   <div class="gate-card">
-    <div class="gate-brand">ForgeAI Studio</div>
-    <div class="gate-title">Etsy Listing <em>Optimizer</em></div>
-    <div class="gate-sub">Enter your access key to unlock your prompt builder tool.</div>
-
-    <label class="gate-label" for="gate-input">Access Key</label>
+    <div class="gate-logo">
+      <div class="gate-logo-icon">CS</div>
+      <div class="gate-logo-text">CyberStorm Technology</div>
+    </div>
+    <h1 class="gate-heading">Etsy Listing<br><span>Optimizer</span></h1>
+    <p class="gate-sub">Enter your access key from your PDF download to unlock your interactive prompt builder.</p>
+    <label class="gate-field-label" for="gate-input">Access Key</label>
     <div class="gate-input-wrap">
-      <input type="password" id="gate-input"
-             placeholder="Enter your access key"
-             autocomplete="off"
-             spellcheck="false"
-             onkeydown="if(event.key==='Enter')unlock()">
+      <input type="password" id="gate-input" placeholder="XXXXXXXXXX" autocomplete="off" spellcheck="false" onkeydown="if(event.key==='Enter')unlock()">
       <span class="gate-eye" onclick="toggleEye()" id="eye-icon">👁</span>
     </div>
     <div class="gate-error" id="gate-error"></div>
-
-    <button id="gate-btn" onclick="unlock()">
-      <span id="btn-text">⚡ Unlock My Tool</span>
-    </button>
-
-    <div class="gate-footer">
-      Your access key is in your PDF download.<br>
-      Questions? <a href="https://forgeaistudio.etsy.com" target="_blank">Message us on Etsy</a>
-    </div>
+    <button id="gate-btn" onclick="unlock()"><span id="btn-text">⚡ &nbsp;Unlock My Tool</span></button>
+    <div class="gate-footer">Your access key is in your PDF download.<br>Need help? <a href="https://cyberstormtech.etsy.com" target="_blank">Message us on Etsy</a></div>
   </div>
 </div>
 
-<!-- ── Main App (hidden until unlocked) ── -->
 <div id="app">
-
-<header>
+<header class="header">
   <div class="header-inner">
-    <div class="brand">
-      <div class="brand-name">ForgeAI Studio</div>
-      <div class="brand-title">Etsy Listing <em>Optimizer</em></div>
+    <div class="header-logo">
+      <div class="logo-mark">CS</div>
+      <div class="logo-info">
+        <div class="logo-brand">CyberStorm Technology</div>
+        <div class="logo-product">Etsy Listing Optimizer</div>
+      </div>
     </div>
     <div class="header-badges">
-      <span class="badge badge-sage">✦ Tier 1 Starter</span>
-      <span class="badge badge-rust">15 Prompts</span>
-      <span class="badge badge-gold">Any AI Platform</span>
+      <span class="hbadge hbadge-cyan">✦ Tier 1</span>
+      <span class="hbadge hbadge-mint">Any AI Platform</span>
+      <span class="hbadge hbadge-amber">Instant Results</span>
     </div>
   </div>
 </header>
-
 <main>
-
-  <div class="intro">
-    <strong>How to use:</strong> Select options from each section below. Your custom prompt assembles automatically in the result box at the bottom. Copy it and paste into <strong>ChatGPT, Claude, Gemini, Copilot, or any AI tool</strong> — no subscription required beyond a free account.
+  <div class="intro-strip">
+    <div class="intro-icon">⚡</div>
+    <div><strong>How to use:</strong> Fill in the sections below — your custom prompt assembles live in the result panel. Hit <strong>Copy Prompt</strong> and paste into <strong>ChatGPT, Claude, Gemini, Copilot, or any AI tool.</strong> No extra subscriptions needed.</div>
   </div>
-
-  <div class="presets-row">
+  <div class="presets-section">
     <div class="presets-label">Quick-Start Presets</div>
     <div class="presets-list">
       <button class="preset-btn" onclick="loadPreset('new-seller')">🌱 New Seller</button>
@@ -784,17 +295,14 @@
     </div>
   </div>
 
-  <div class="section-card">
-    <div class="section-header active" onclick="toggleSection(this)">
-      <div class="section-num">1</div>
-      <div class="section-icon">◈</div>
-      <div class="section-title">Listing Type</div>
-      <div class="section-chevron">▾</div>
+  <div class="section-card" id="sc1">
+    <div class="section-header active" onclick="toggleSection(this,'sc1')">
+      <div class="section-num">1</div><div class="section-icon">◈</div>
+      <div class="section-title">Listing Type</div><div class="section-chevron">▾</div>
     </div>
     <div class="section-body open">
       <div class="fields">
-        <div class="field">
-          <label>Product Type</label>
+        <div class="field"><label>Product Type</label>
           <select id="product-type" onchange="buildPrompt()">
             <option value="">— Choose —</option>
             <option value="handmade physical item">Handmade Physical Item</option>
@@ -811,12 +319,10 @@
             <option value="clothing or accessory">Clothing or Accessory</option>
           </select>
         </div>
-        <div class="field">
-          <label>Your Product Name</label>
+        <div class="field"><label>Your Product Name</label>
           <input type="text" id="product-name" placeholder="e.g. Wildflower Watercolor Print" oninput="buildPrompt()">
         </div>
-        <div class="field">
-          <label>Target Buyer</label>
+        <div class="field"><label>Target Buyer</label>
           <select id="target-buyer" onchange="buildPrompt()">
             <option value="">— Choose —</option>
             <option value="gift buyers">Gift Buyers</option>
@@ -832,8 +338,7 @@
             <option value="self-care seekers">Self-Care Seekers</option>
           </select>
         </div>
-        <div class="field">
-          <label>Price Range</label>
+        <div class="field"><label>Price Range</label>
           <select id="price-range" onchange="buildPrompt()">
             <option value="">— Choose —</option>
             <option value="under $10 (impulse buy)">Under $10 — Impulse Buy</option>
@@ -846,39 +351,33 @@
     </div>
   </div>
 
-  <div class="section-card">
-    <div class="section-header" onclick="toggleSection(this)">
-      <div class="section-num">2</div>
-      <div class="section-icon">★</div>
-      <div class="section-title">What Do You Want to Improve?</div>
-      <div class="section-chevron">▾</div>
+  <div class="section-card" id="sc2">
+    <div class="section-header" onclick="toggleSection(this,'sc2')">
+      <div class="section-num">2</div><div class="section-icon">★</div>
+      <div class="section-title">What Do You Want to Improve?</div><div class="section-chevron">▾</div>
     </div>
     <div class="section-body">
       <div class="fields">
-        <div class="field full">
-          <label>Primary Goal</label>
+        <div class="field full"><label>Primary Goal</label>
           <select id="goal" onchange="buildPrompt()">
             <option value="">— Choose —</option>
-            <option value="Write an SEO-optimized listing title that front-loads the primary keyword and stays under 140 characters">📌 Write an SEO Title (under 140 chars)</option>
-            <option value="Write a complete listing description with an emotional hook, bullet-point features, and a clear call to action">📝 Write a Full Listing Description</option>
-            <option value="Generate a complete set of 13 Etsy tags that mix long-tail and broad keywords, each under 20 characters">🏷️ Generate 13 Etsy Tags</option>
-            <option value="Write a shop announcement that communicates my brand personality and current offers">📣 Write a Shop Announcement</option>
-            <option value="Write a compelling shop bio that builds trust and tells my brand story in under 250 words">👤 Write a Shop Bio</option>
-            <option value="Rewrite my existing listing title and description to improve SEO and conversion — I'll paste my current version below">✏️ Rewrite / Optimize Existing Listing</option>
-            <option value="Write a description that appeals specifically to holiday and seasonal gift buyers">🎁 Write a Gift-Focused Description</option>
-            <option value="Write 5 variations of my listing title targeting different long-tail keyword phrases">🔀 Generate 5 Title Variations</option>
+            <option value="Write an SEO-optimized listing title that front-loads the primary keyword and stays under 140 characters">📌  Write an SEO Title (under 140 chars)</option>
+            <option value="Write a complete listing description with an emotional hook, bullet-point features, and a clear call to action">📝  Write a Full Listing Description</option>
+            <option value="Generate a complete set of 13 Etsy tags that mix long-tail and broad keywords, each under 20 characters">🏷️  Generate 13 Etsy Tags</option>
+            <option value="Write a shop announcement that communicates my brand personality and current offers">📣  Write a Shop Announcement</option>
+            <option value="Write a compelling shop bio that builds trust and tells my brand story in under 250 words">👤  Write a Shop Bio</option>
+            <option value="Rewrite my existing listing title and description to improve SEO and conversion — I'll paste my current version below">✏️  Rewrite / Optimize Existing Listing</option>
+            <option value="Write a description that appeals specifically to holiday and seasonal gift buyers">🎁  Write a Gift-Focused Description</option>
+            <option value="Write 5 variations of my listing title targeting different long-tail keyword phrases">🔀  Generate 5 Title Variations</option>
           </select>
         </div>
-        <div class="field full">
-          <label>Primary Keyword (what buyers search for)</label>
+        <div class="field full"><label>Primary Keyword — What buyers search for</label>
           <input type="text" id="keyword" placeholder="e.g. watercolor flower print, handmade soy candle" oninput="buildPrompt()">
         </div>
-        <div class="field">
-          <label>Secondary Keyword (optional)</label>
+        <div class="field"><label>Secondary Keyword (optional)</label>
           <input type="text" id="keyword2" placeholder="e.g. boho wall art, cottagecore gift" oninput="buildPrompt()">
         </div>
-        <div class="field">
-          <label>Season or Occasion (optional)</label>
+        <div class="field"><label>Season or Occasion (optional)</label>
           <select id="season" onchange="buildPrompt()">
             <option value="">— None / Evergreen —</option>
             <option value="Christmas / Holiday Season">Christmas / Holiday Season</option>
@@ -897,17 +396,14 @@
     </div>
   </div>
 
-  <div class="section-card">
-    <div class="section-header" onclick="toggleSection(this)">
-      <div class="section-num">3</div>
-      <div class="section-icon">✦</div>
-      <div class="section-title">Tone & Output Format</div>
-      <div class="section-chevron">▾</div>
+  <div class="section-card" id="sc3">
+    <div class="section-header" onclick="toggleSection(this,'sc3')">
+      <div class="section-num">3</div><div class="section-icon">✦</div>
+      <div class="section-title">Tone &amp; Output Format</div><div class="section-chevron">▾</div>
     </div>
     <div class="section-body">
       <div class="fields">
-        <div class="field">
-          <label>Listing Tone</label>
+        <div class="field"><label>Listing Tone</label>
           <select id="tone" onchange="buildPrompt()">
             <option value="">— Choose —</option>
             <option value="warm and personal">Warm and Personal</option>
@@ -919,46 +415,32 @@
             <option value="storytelling and emotional">Storytelling and Emotional</option>
           </select>
         </div>
-        <div class="field">
-          <label>Output Format</label>
+        <div class="field"><label>Output Format</label>
           <select id="format" onchange="buildPrompt()">
             <option value="">— Choose —</option>
             <option value="Give me 3 versions to choose from">3 Versions to Compare</option>
             <option value="Give me 1 polished final version">1 Polished Final Version</option>
-            <option value="Give me 5 title variations as a numbered list">5 Title Variations (numbered list)</option>
+            <option value="Give me 5 title variations as a numbered list">5 Title Variations (list)</option>
             <option value="Give me bullet points for the key features section">Bullet Points Only</option>
-            <option value="Give me a full listing with all sections labeled">Full Listing — All Sections Labeled</option>
+            <option value="Give me a full listing with all sections labeled">Full Listing — All Sections</option>
           </select>
         </div>
-        <div class="field full">
-          <label>Your Existing Listing or Extra Details (optional)</label>
-          <textarea id="existing" placeholder="Paste your current listing title / description here to rewrite it, or add any product details the AI should know..." oninput="buildPrompt()"></textarea>
+        <div class="field full"><label>Existing Listing or Extra Details (optional)</label>
+          <textarea id="existing" placeholder="Paste your current listing title / description to rewrite it, or add product details the AI should know..." oninput="buildPrompt()"></textarea>
         </div>
       </div>
-      <div class="tip-box">
-        <strong>Pro tip:</strong> The more specific your keyword and product name, the better your output. Instead of "candle" try "hand-poured soy candle with wood wick" — the AI will produce far more targeted results.
-      </div>
+      <div class="tip-box"><strong>Pro tip:</strong> Specificity = better results. Instead of "candle" try "hand-poured soy candle with wood wick" — the AI produces far more targeted copy with real details.</div>
     </div>
   </div>
 
   <div class="result-section">
     <div class="result-header">
-      <div class="result-label">
-        <span>⚡</span> Your Assembled Prompt
-      </div>
+      <div class="result-label"><div class="result-dot"></div>Your Assembled Prompt</div>
       <div class="platform-pills">
-        <span class="pill">ChatGPT</span>
-        <span class="pill">Claude</span>
-        <span class="pill">Gemini</span>
-        <span class="pill">Copilot</span>
-        <span class="pill">Meta AI</span>
+        <span class="ppill">ChatGPT</span><span class="ppill">Claude</span><span class="ppill">Gemini</span><span class="ppill">Copilot</span><span class="ppill">Meta AI</span>
       </div>
     </div>
-    <div class="result-body">
-      <div id="prompt-output">
-        <span class="placeholder">← Fill in the sections above and your prompt will appear here, ready to copy and paste into any AI platform.</span>
-      </div>
-    </div>
+    <div class="result-body"><div id="prompt-output"><span class="placeholder-text">← Fill in the sections above — your prompt assembles here in real time, ready to copy into any AI platform.</span></div></div>
     <div class="result-footer">
       <div class="char-count" id="char-count">0 characters</div>
       <div class="btn-row">
@@ -972,309 +454,67 @@
   <div class="upgrade-banner">
     <div class="upgrade-text">
       <h3>Ready for more? Upgrade to the Pro Pack →</h3>
-      <p>Unlock <strong>40 prompt types</strong> including Shop Bio, Review Responses, Seasonal Campaigns, Competitor Analysis, and a Brand Voice Guide — all in the same zero-friction tool.</p>
+      <p>Unlock <strong>40 prompt types</strong> including Shop Bio, Review Responses, Seasonal Campaigns, Competitor Analysis &amp; a Brand Voice Guide — same zero-friction tool.</p>
     </div>
-    <a href="https://forgeaistudio.etsy.com" class="btn-upgrade" target="_blank">View Pro Pack ↗</a>
+    <a href="https://cyberstormtech.etsy.com" class="btn-upgrade" target="_blank">View Pro Pack ↗</a>
   </div>
-
 </main>
-
-<footer>
-  © ForgeAI Studio · Etsy Listing Optimizer · Tier 1 Starter · Personal &amp; Commercial Use License Included
-</footer>
-
-<div class="toast" id="toast">✓ Prompt copied to clipboard!</div>
-
-</div><!-- /#app -->
+<footer class="site-footer">© ForgeAI Studio &nbsp;·&nbsp; Etsy Listing Optimizer &nbsp;·&nbsp; Tier 1 Starter &nbsp;·&nbsp; Personal &amp; Commercial Use License Included</footer>
+<div class="toast" id="toast">✓ &nbsp;Prompt copied to clipboard</div>
+</div>
 
 <script>
-// ── Access Control ────────────────────────────────────────────────────────────
-function checkSession() {
-  if (sessionStorage.getItem('fai_unlocked') === '1') {
-    showApp();
-  }
+function checkSession(){if(sessionStorage.getItem('cs_unlocked')==='1')showApp();}
+function unlock(){
+  const input=document.getElementById('gate-input'),error=document.getElementById('gate-error'),btn=document.getElementById('gate-btn'),val=input.value.toUpperCase().trim();
+  if(val!=='FORGEAI-T1'){input.classList.add('error');error.textContent='✗  Incorrect access key — check your PDF download.';setTimeout(()=>input.classList.remove('error'),600);input.select();return;}
+  error.textContent='';btn.classList.add('unlocking');document.getElementById('btn-text').textContent='✓  Unlocked — Loading your tool...';
+  sessionStorage.setItem('cs_unlocked','1');
+  setTimeout(()=>{document.getElementById('gate').classList.add('fade-out');setTimeout(showApp,500);},450);
 }
-
-function unlock() {
-  const input = document.getElementById('gate-input');
-  const error = document.getElementById('gate-error');
-  const btn   = document.getElementById('gate-btn');
-  const val   = input.value.toUpperCase().trim();
-  const correct = (val === 'FORGEAI-T1');
-
-  if (!correct) {
-    input.classList.add('error');
-    error.textContent = '✗  Incorrect access key. Check your PDF download.';
-    setTimeout(() => input.classList.remove('error'), 600);
-    input.select();
-    return;
-  }
-
-  error.textContent = '';
-  btn.classList.add('unlocking');
-  document.getElementById('btn-text').textContent = '✓ Unlocked — Loading your tool...';
-  sessionStorage.setItem('fai_unlocked', '1');
-
-  setTimeout(() => {
-    const gate = document.getElementById('gate');
-    gate.classList.add('unlocking-anim');
-    setTimeout(() => {
-      gate.style.display = 'none';
-      showApp();
-    }, 800);
-  }, 400);
-}
-
-function showApp() {
-  document.getElementById('gate').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
-  buildPrompt();
-}
-
-function toggleEye() {
-  const input = document.getElementById('gate-input');
-  const eye   = document.getElementById('eye-icon');
-  if (input.type === 'password') {
-    input.type = 'text';
-    eye.textContent = '🙈';
-  } else {
-    input.type = 'password';
-    eye.textContent = '👁';
-  }
-}
-
+function showApp(){document.getElementById('gate').style.display='none';document.getElementById('app').style.display='block';buildPrompt();}
+function toggleEye(){const i=document.getElementById('gate-input'),e=document.getElementById('eye-icon');i.type=i.type==='password'?'text':'password';e.textContent=i.type==='password'?'👁':'🙈';}
 checkSession();
 
-// ── Prompt Builder ────────────────────────────────────────────────────────────
-function buildPrompt() {
-  const productType = get('product-type');
-  const productName = get('product-name');
-  const targetBuyer = get('target-buyer');
-  const priceRange  = get('price-range');
-  const goal        = get('goal');
-  const keyword     = get('keyword');
-  const keyword2    = get('keyword2');
-  const season      = get('season');
-  const tone        = get('tone');
-  const format      = get('format');
-  const existing    = get('existing');
-
-  const hasContent = goal || keyword || productType;
-  if (!hasContent) {
-    setOutput('<span class="placeholder">← Fill in the sections above and your prompt will appear here, ready to copy and paste into any AI platform.</span>');
-    updateCount(0);
-    return;
-  }
-
-  let parts = [];
-
-  if (goal) { parts.push(goal); } else { parts.push('Write optimized Etsy listing copy'); }
-
-  let productCtx = [];
-  if (productName) productCtx.push(`"${productName}"`);
-  if (productType) productCtx.push(`(${productType})`);
-  if (productCtx.length) parts.push(`for ${productCtx.join(' ')}`);
-
-  let audienceCtx = [];
-  if (targetBuyer) audienceCtx.push(`targeting ${targetBuyer}`);
-  if (priceRange)  audienceCtx.push(`in the ${priceRange} range`);
-  if (audienceCtx.length) parts.push(audienceCtx.join(', '));
-
-  let kwCtx = [];
-  if (keyword)  kwCtx.push(`"${keyword}"`);
-  if (keyword2) kwCtx.push(`"${keyword2}"`);
-  if (kwCtx.length) {
-    parts.push(`The primary keyword${kwCtx.length > 1 ? 's are' : ' is'} ${kwCtx.join(' and ')}`);
-  }
-
-  if (season) parts.push(`Optimize the copy for ${season}`);
-  if (tone)   parts.push(`Use a ${tone} tone throughout`);
-  if (format) parts.push(format);
-
-  if (existing.trim()) {
-    parts.push(`\n\nHere is my existing listing content to work from:\n---\n${existing.trim()}\n---`);
-  }
-
-  let rules = [];
-  if (goal && goal.includes('title')) {
-    rules.push('Keep the title under 140 characters');
-    rules.push('Front-load the most important keyword');
-    rules.push('Avoid filler words like "beautiful" or "unique"');
-  }
-  if (goal && goal.includes('tag')) {
-    rules.push('Each tag must be under 20 characters');
-    rules.push('Include a mix of specific long-tail phrases and broader single keywords');
-    rules.push('Format as a comma-separated list');
-  }
-  if (goal && goal.includes('description')) {
-    rules.push('Open with the biggest buyer benefit — not "This is a..."');
-    rules.push('Naturally include the primary keyword within the first 40 words');
-    rules.push('Keep under 400 words unless otherwise specified');
-  }
-
-  if (rules.length) {
-    parts.push(`\n\nImportant rules:\n${rules.map(r => `• ${r}`).join('\n')}`);
-  }
-
-  const prompt = parts.join('. ').replace(/\.\s*\./g, '.').replace(/\n\./g, '\n');
-  const clean = prompt.trim();
-  const display = clean.replace(/\[([^\]]+)\]/g, '<span class="var-highlight">[$1]</span>');
-
-  setOutput(display);
+function buildPrompt(){
+  const productType=get('product-type'),productName=get('product-name'),targetBuyer=get('target-buyer'),priceRange=get('price-range'),goal=get('goal'),keyword=get('keyword'),keyword2=get('keyword2'),season=get('season'),tone=get('tone'),format=get('format'),existing=get('existing');
+  if(!goal&&!keyword&&!productType){document.getElementById('prompt-output').innerHTML='<span class="placeholder-text">← Fill in the sections above — your prompt assembles here in real time, ready to copy into any AI platform.</span>';updateCount(0);return;}
+  let parts=[];
+  parts.push(goal||'Write optimized Etsy listing copy');
+  let ctx=[];if(productName)ctx.push('"'+productName+'"');if(productType)ctx.push('('+productType+')');if(ctx.length)parts.push('for '+ctx.join(' '));
+  let aud=[];if(targetBuyer)aud.push('targeting '+targetBuyer);if(priceRange)aud.push('in the '+priceRange+' range');if(aud.length)parts.push(aud.join(', '));
+  let kws=[];if(keyword)kws.push('"'+keyword+'"');if(keyword2)kws.push('"'+keyword2+'"');if(kws.length)parts.push('The primary keyword'+(kws.length>1?'s are':' is')+' '+kws.join(' and '));
+  if(season)parts.push('Optimize for '+season);if(tone)parts.push('Use a '+tone+' tone throughout');if(format)parts.push(format);
+  if(existing.trim())parts.push('\n\nExisting listing content:\n---\n'+existing.trim()+'\n---');
+  let rules=[];
+  if(goal.includes('title')){rules.push('Keep under 140 characters');rules.push('Front-load the most important keyword');rules.push('No filler words like "beautiful" or "unique"');}
+  if(goal.includes('tag')){rules.push('Each tag under 20 characters');rules.push('Mix long-tail phrases with broader keywords');rules.push('Comma-separated list format');}
+  if(goal.includes('description')){rules.push('Lead with buyer benefit, not "This is a..."');rules.push('Include primary keyword within first 40 words');rules.push('Keep under 400 words');}
+  if(rules.length)parts.push('\n\nRules:\n'+rules.map(r=>'• '+r).join('\n'));
+  const clean=parts.join('. ').replace(/\.\s*\./g,'.').replace(/\n\./g,'\n').trim();
+  document.getElementById('prompt-output').innerHTML=clean.replace(/\[([^\]]+)\]/g,'<span class="var-hl">[$1]</span>');
+  document.getElementById('prompt-output').dataset.raw=clean;
   updateCount(clean.length);
-  document.getElementById('prompt-output').dataset.raw = clean;
 }
-
-function get(id) {
-  const el = document.getElementById(id);
-  return el ? el.value.trim() : '';
+function get(id){const el=document.getElementById(id);return el?el.value.trim():'';}
+function updateCount(n){document.getElementById('char-count').textContent=n>0?n+' characters':'0 characters';}
+function copyPrompt(){
+  const el=document.getElementById('prompt-output'),raw=el.dataset.raw||el.innerText;
+  if(!raw||raw.includes('Fill in the sections'))return;
+  navigator.clipboard.writeText(raw).then(()=>{const btn=document.getElementById('copy-btn');btn.textContent='✓ Copied!';btn.classList.add('copied');showToast();setTimeout(()=>{btn.innerHTML='⧉ Copy Prompt';btn.classList.remove('copied');},2500);}).catch(()=>{const ta=document.createElement('textarea');ta.value=raw;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast();});
 }
-
-function setOutput(html) { document.getElementById('prompt-output').innerHTML = html; }
-function updateCount(n) {
-  document.getElementById('char-count').textContent = n > 0 ? `${n} characters` : '0 characters';
-}
-
-function copyPrompt() {
-  const el = document.getElementById('prompt-output');
-  const raw = el.dataset.raw || el.innerText;
-  if (!raw || raw.includes('Fill in the sections')) return;
-
-  navigator.clipboard.writeText(raw).then(() => {
-    const btn = document.getElementById('copy-btn');
-    btn.textContent = '✓ Copied!';
-    btn.classList.add('copied');
-    showToast();
-    setTimeout(() => { btn.textContent = '⧉ Copy Prompt'; btn.classList.remove('copied'); }, 2500);
-  }).catch(() => {
-    const ta = document.createElement('textarea');
-    ta.value = raw;
-    ta.style.position = 'fixed';
-    ta.style.opacity = '0';
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-    showToast();
-  });
-}
-
-function showToast() {
-  const t = document.getElementById('toast');
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
-}
-
-function resetAll() {
-  ['product-type','target-buyer','price-range','goal','season','tone','format']
-    .forEach(id => { document.getElementById(id).value = ''; });
-  ['product-name','keyword','keyword2','existing']
-    .forEach(id => { document.getElementById(id).value = ''; });
+function showToast(){const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+function resetAll(){
+  ['product-type','target-buyer','price-range','goal','season','tone','format'].forEach(id=>{document.getElementById(id).value='';});
+  ['product-name','keyword','keyword2','existing'].forEach(id=>{document.getElementById(id).value='';});
   buildPrompt();
 }
-
-const RANDOM_OPTS = {
-  'product-type': ['handmade physical item','digital download / printable','art print','jewelry','home décor item','candle or soap','vintage item'],
-  'target-buyer': ['gift buyers','home decorators','crafters and DIYers','parents and families','self-care seekers','artists and creatives'],
-  'goal': [
-    'Write an SEO-optimized listing title that front-loads the primary keyword and stays under 140 characters',
-    'Write a complete listing description with an emotional hook, bullet-point features, and a clear call to action',
-    'Generate a complete set of 13 Etsy tags that mix long-tail and broad keywords, each under 20 characters',
-    'Write 5 variations of my listing title targeting different long-tail keyword phrases',
-  ],
-  'tone': ['warm and personal','playful and fun','earthy and authentic','luxurious and refined','storytelling and emotional'],
-  'format': ['Give me 3 versions to choose from','Give me 1 polished final version','Give me a full listing with all sections labeled'],
-};
-
-const RANDOM_KEYWORDS = [
-  'handmade ceramic mug','watercolor botanical print','boho macramé wall hanging',
-  'hand-poured soy candle','vintage brass candleholder','personalized leather wallet',
-  'cottagecore mushroom embroidery kit','minimalist line art print','antique milk glass vase',
-  'wildflower seed packet wedding favor',
-];
-
-function randomize() {
-  Object.entries(RANDOM_OPTS).forEach(([id, opts]) => {
-    document.getElementById(id).value = opts[Math.floor(Math.random() * opts.length)];
-  });
-  const kw = RANDOM_KEYWORDS[Math.floor(Math.random() * RANDOM_KEYWORDS.length)];
-  document.getElementById('keyword').value = kw;
-  document.getElementById('product-name').value = kw.split(' ').map(w => w[0].toUpperCase()+w.slice(1)).join(' ');
-  buildPrompt();
-}
-
-const PRESETS = {
-  'new-seller': {
-    'product-type': 'handmade physical item',
-    'target-buyer': 'gift buyers',
-    'goal': 'Write a complete listing description with an emotional hook, bullet-point features, and a clear call to action',
-    'tone': 'warm and personal',
-    'format': 'Give me 1 polished final version',
-    'keyword': 'handmade gift',
-  },
-  'digital-product': {
-    'product-type': 'digital download / printable',
-    'target-buyer': 'home decorators',
-    'goal': 'Write an SEO-optimized listing title that front-loads the primary keyword and stays under 140 characters',
-    'tone': 'professional and clear',
-    'format': 'Give me 5 title variations as a numbered list',
-    'keyword': 'printable wall art',
-    'keyword2': 'instant download',
-  },
-  'handmade-gift': {
-    'product-type': 'handmade physical item',
-    'target-buyer': 'gift buyers',
-    'goal': 'Write a complete listing description with an emotional hook, bullet-point features, and a clear call to action',
-    'tone': 'storytelling and emotional',
-    'format': 'Give me 1 polished final version',
-    'keyword': 'unique handmade gift',
-    'price-range': '$25–$50 (considered purchase)',
-  },
-  'holiday-season': {
-    'product-type': 'handmade physical item',
-    'target-buyer': 'gift buyers',
-    'goal': 'Write a description that appeals specifically to holiday and seasonal gift buyers',
-    'tone': 'warm and personal',
-    'format': 'Give me 1 polished final version',
-    'keyword': 'Christmas gift',
-    'season': 'Christmas / Holiday Season',
-  },
-  'vintage-item': {
-    'product-type': 'vintage item',
-    'target-buyer': 'vintage collectors',
-    'goal': 'Write a complete listing description with an emotional hook, bullet-point features, and a clear call to action',
-    'tone': 'storytelling and emotional',
-    'format': 'Give me 1 polished final version',
-    'keyword': 'vintage collectible',
-  },
-  'seo-boost': {
-    'product-type': 'handmade physical item',
-    'goal': 'Generate a complete set of 13 Etsy tags that mix long-tail and broad keywords, each under 20 characters',
-    'tone': 'professional and clear',
-    'format': 'Give me bullet points for the key features section',
-    'keyword': 'handmade home decor',
-  },
-};
-
-function loadPreset(key) {
-  resetAll();
-  const p = PRESETS[key];
-  if (!p) return;
-  Object.entries(p).forEach(([id, val]) => {
-    const el = document.getElementById(id);
-    if (el) el.value = val;
-  });
-  document.querySelectorAll('.section-body').forEach(b => b.classList.add('open'));
-  document.querySelectorAll('.section-header').forEach(h => h.classList.add('active'));
-  buildPrompt();
-}
-
-function toggleSection(header) {
-  const body = header.nextElementSibling;
-  const isOpen = body.classList.contains('open');
-  body.classList.toggle('open', !isOpen);
-  header.classList.toggle('active', !isOpen);
-}
+const RND={'product-type':['handmade physical item','digital download / printable','art print','jewelry','home décor item','candle or soap','vintage item'],'target-buyer':['gift buyers','home decorators','crafters and DIYers','parents and families','self-care seekers','artists and creatives'],'goal':['Write an SEO-optimized listing title that front-loads the primary keyword and stays under 140 characters','Write a complete listing description with an emotional hook, bullet-point features, and a clear call to action','Generate a complete set of 13 Etsy tags that mix long-tail and broad keywords, each under 20 characters','Write 5 variations of my listing title targeting different long-tail keyword phrases'],'tone':['warm and personal','playful and fun','earthy and authentic','luxurious and refined','storytelling and emotional'],'format':['Give me 3 versions to choose from','Give me 1 polished final version','Give me a full listing with all sections labeled']};
+const RND_KW=['handmade ceramic mug','watercolor botanical print','boho macramé wall hanging','hand-poured soy candle','vintage brass candleholder','personalized leather wallet','cottagecore mushroom embroidery kit','minimalist line art print','antique milk glass vase','wildflower seed packet wedding favor'];
+function randomize(){Object.entries(RND).forEach(([id,opts])=>{document.getElementById(id).value=opts[Math.floor(Math.random()*opts.length)];});const kw=RND_KW[Math.floor(Math.random()*RND_KW.length)];document.getElementById('keyword').value=kw;document.getElementById('product-name').value=kw.split(' ').map(w=>w[0].toUpperCase()+w.slice(1)).join(' ');buildPrompt();}
+const PRESETS={'new-seller':{'product-type':'handmade physical item','target-buyer':'gift buyers','goal':'Write a complete listing description with an emotional hook, bullet-point features, and a clear call to action','tone':'warm and personal','format':'Give me 1 polished final version','keyword':'handmade gift'},'digital-product':{'product-type':'digital download / printable','target-buyer':'home decorators','goal':'Write an SEO-optimized listing title that front-loads the primary keyword and stays under 140 characters','tone':'professional and clear','format':'Give me 5 title variations as a numbered list','keyword':'printable wall art','keyword2':'instant download'},'handmade-gift':{'product-type':'handmade physical item','target-buyer':'gift buyers','goal':'Write a complete listing description with an emotional hook, bullet-point features, and a clear call to action','tone':'storytelling and emotional','format':'Give me 1 polished final version','keyword':'unique handmade gift','price-range':'$25–$50 (considered purchase)'},'holiday-season':{'product-type':'handmade physical item','target-buyer':'gift buyers','goal':'Write a description that appeals specifically to holiday and seasonal gift buyers','tone':'warm and personal','format':'Give me 1 polished final version','keyword':'Christmas gift','season':'Christmas / Holiday Season'},'vintage-item':{'product-type':'vintage item','target-buyer':'vintage collectors','goal':'Write a complete listing description with an emotional hook, bullet-point features, and a clear call to action','tone':'storytelling and emotional','format':'Give me 1 polished final version','keyword':'vintage collectible'},'seo-boost':{'product-type':'handmade physical item','goal':'Generate a complete set of 13 Etsy tags that mix long-tail and broad keywords, each under 20 characters','tone':'professional and clear','format':'Give me bullet points for the key features section','keyword':'handmade home decor'}};
+function loadPreset(key){resetAll();const p=PRESETS[key];if(!p)return;Object.entries(p).forEach(([id,val])=>{const el=document.getElementById(id);if(el)el.value=val;});document.querySelectorAll('.section-body').forEach(b=>b.classList.add('open'));document.querySelectorAll('.section-header').forEach(h=>h.classList.add('active'));document.querySelectorAll('.section-card').forEach(c=>c.classList.add('is-open'));buildPrompt();}
+function toggleSection(header,cardId){const body=header.nextElementSibling,card=document.getElementById(cardId),open=body.classList.contains('open');body.classList.toggle('open',!open);header.classList.toggle('active',!open);card.classList.toggle('is-open',!open);}
 </script>
 </body>
 </html>
