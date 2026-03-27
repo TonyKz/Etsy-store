@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Etsy Listing Optimizer · ForgeAI Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:wght@300;400;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --kraft:       #C4935A;
+    --kraft-light: #E8D5B0;
+    --kraft-pale:  #F5ECD8;
+    --kraft-dark:  #8B5E2A;
+    --brown-deep:  #2C1A0A;
+    --brown-mid:   #5C3418;
+    --cream:       #FBF5E6;
+    --cream-dark:  #F0E4C8;
+    --gold:        #A07820;
+    --gold-light:  #D4A830;
+    --rust:        #8B3820;
+    --rust-light:  #C45A30;
+    --sage:        #3D5C30;
+    --sage-light:  #6B8C50;
+    --ink:         #1A0E06;
+    --shadow:      rgba(44,26,10,0.15);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--cream);
+    color: var(--brown-deep);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  header {
+    background: var(--brown-deep);
+    border-bottom: 3px solid var(--gold);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0; right: 0;
+    height: 4px;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--gold) 0px, var(--gold) 8px,
+      transparent 8px, transparent 12px
+    );
+  }
+
+  .header-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 28px 24px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .brand { display: flex; flex-direction: column; gap: 2px; }
+
+  .brand-name {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+  }
+
+  .brand-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1.1;
+  }
+
+  .brand-title em { color: var(--gold-light); font-style: italic; }
+
+  .header-badges { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    padding: 4px 10px;
+    border-radius: 3px;
+    text-transform: uppercase;
+  }
+
+  .badge-sage { background: var(--sage); color: #C8E0B0; }
+  .badge-rust { background: var(--rust); color: #F0C0A0; }
+  .badge-gold { background: var(--gold); color: #FFF3C0; }
+
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 32px 20px 60px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .intro {
+    background: var(--kraft-pale);
+    border: 1px solid var(--kraft-light);
+    border-left: 4px solid var(--kraft);
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin-bottom: 32px;
+    font-size: 14px;
+    color: var(--brown-mid);
+    line-height: 1.6;
+  }
+
+  .intro strong { color: var(--brown-deep); }
+
+  .section-card {
+    background: white;
+    border: 1px solid var(--kraft-light);
+    border-radius: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px var(--shadow);
+    animation: fadeUp 0.4s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-card:nth-child(2) { animation-delay: 0.05s; }
+  .section-card:nth-child(3) { animation-delay: 0.10s; }
+  .section-card:nth-child(4) { animation-delay: 0.15s; }
+
+  .section-header {
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
+  }
+
+  .section-header:hover { background: var(--kraft-pale); }
+  .section-header.active { background: var(--brown-deep); }
+  .section-header.active .section-title { color: var(--cream); }
+  .section-header.active .section-icon { color: var(--gold-light); }
+  .section-header.active .section-num { background: var(--gold); color: var(--brown-deep); }
+  .section-header.active .section-chevron { color: var(--kraft-light); transform: rotate(180deg); }
+
+  .section-num {
+    width: 26px; height: 26px;
+    background: var(--kraft-light);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--kraft-dark);
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+
+  .section-icon { font-size: 16px; color: var(--kraft); transition: color 0.2s; }
+
+  .section-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--brown-deep);
+    flex: 1;
+    transition: color 0.2s;
+  }
+
+  .section-chevron { color: var(--kraft); font-size: 14px; transition: transform 0.25s ease, color 0.2s; }
+
+  .section-body { display: none; border-top: 1px solid var(--kraft-light); }
+  .section-body.open { display: block; }
+
+  .fields {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  @media (max-width: 600px) { .fields { grid-template-columns: 1fr; } }
+
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field.full { grid-column: 1 / -1; }
+
+  label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--kraft-dark);
+  }
+
+  select, input[type="text"], textarea {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 13.5px;
+    color: var(--brown-deep);
+    background: var(--cream);
+    border: 1px solid var(--kraft-light);
+    border-radius: 4px;
+    padding: 9px 12px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238B5E2A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+    cursor: pointer;
+  }
+
+  select:focus, input:focus, textarea:focus {
+    border-color: var(--kraft);
+    box-shadow: 0 0 0 3px rgba(196,147,90,0.15);
+  }
+
+  textarea { resize: vertical; min-height: 70px; line-height: 1.5; }
+
+  .result-section {
+    background: var(--brown-deep);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px var(--shadow);
+    margin-bottom: 20px;
+    animation: fadeUp 0.4s 0.2s ease both;
+    position: sticky;
+    bottom: 20px;
+  }
+
+  .result-header {
+    padding: 14px 20px;
+    background: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .result-label {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--brown-deep);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .result-label span { font-size: 16px; }
+
+  .platform-pills { display: flex; gap: 5px; flex-wrap: wrap; }
+
+  .pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    padding: 2px 7px;
+    border-radius: 20px;
+    background: rgba(44,26,10,0.2);
+    color: var(--brown-deep);
+    letter-spacing: 0.05em;
+  }
+
+  .result-body { padding: 20px; }
+
+  #prompt-output {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 14px;
+    line-height: 1.75;
+    color: var(--kraft-light);
+    min-height: 100px;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  #prompt-output .placeholder { color: var(--kraft-dark); font-style: italic; font-size: 13px; }
+  #prompt-output .var-highlight {
+    color: var(--gold-light);
+    font-weight: 600;
+    background: rgba(212,168,48,0.12);
+    border-radius: 2px;
+    padding: 0 2px;
+  }
+
+  .result-footer {
+    padding: 12px 20px;
+    border-top: 1px solid rgba(196,147,90,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .char-count { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--kraft-dark); }
+
+  .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .btn-copy { background: var(--gold-light); color: var(--brown-deep); }
+  .btn-copy:hover { background: var(--gold); transform: translateY(-1px); }
+  .btn-copy:active { transform: translateY(0); }
+  .btn-copy.copied { background: var(--sage); color: #C8E0B0; }
+
+  .btn-reset {
+    background: rgba(196,147,90,0.15);
+    color: var(--kraft-light);
+    border: 1px solid rgba(196,147,90,0.25);
+  }
+  .btn-reset:hover { background: rgba(196,147,90,0.25); }
+
+  .btn-random { background: rgba(139,56,32,0.6); color: #F0C0A0; border: 1px solid rgba(139,56,32,0.3); }
+  .btn-random:hover { background: var(--rust); }
+
+  .presets-row { margin-bottom: 24px; animation: fadeUp 0.4s 0.05s ease both; }
+
+  .presets-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--kraft-dark);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .presets-label::after { content: ''; flex: 1; height: 1px; background: var(--kraft-light); }
+
+  .presets-list { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .preset-btn {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 12.5px;
+    padding: 7px 14px;
+    border-radius: 4px;
+    border: 1px solid var(--kraft-light);
+    background: white;
+    color: var(--brown-mid);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .preset-btn:hover {
+    border-color: var(--kraft);
+    background: var(--kraft-pale);
+    color: var(--brown-deep);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px var(--shadow);
+  }
+
+  .tip-box {
+    background: var(--kraft-pale);
+    border: 1px solid var(--kraft-light);
+    border-left: 3px solid var(--rust-light);
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin: 0 20px 20px;
+    font-size: 12.5px;
+    color: var(--brown-mid);
+    line-height: 1.6;
+  }
+
+  .tip-box strong { color: var(--rust); }
+
+  .upgrade-banner {
+    background: linear-gradient(135deg, var(--sage) 0%, var(--sage-light) 100%);
+    border-radius: 6px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    animation: fadeUp 0.4s 0.25s ease both;
+  }
+
+  .upgrade-text h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 4px;
+  }
+
+  .upgrade-text p { font-size: 12.5px; color: rgba(255,255,255,0.75); line-height: 1.5; }
+  .upgrade-text p strong { color: rgba(255,255,255,0.95); }
+
+  .btn-upgrade {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    background: white;
+    color: var(--sage);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-upgrade:hover { background: var(--cream); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+
+  footer {
+    text-align: center;
+    padding: 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--kraft-dark);
+    border-top: 1px solid var(--kraft-light);
+    margin-top: 40px;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(60px);
+    background: var(--sage);
+    color: white;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 4px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+    letter-spacing: 0.05em;
+  }
+
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--cream-dark); }
+  ::-webkit-scrollbar-thumb { background: var(--kraft-light); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--kraft); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-name">ForgeAI Studio</div>
+      <div class="brand-title">Etsy Listing <em>Optimizer</em></div>
+    </div>
+    <div class="header-badges">
+      <span class="badge badge-sage">✦ Tier 1 Starter</span>
+      <span class="badge badge-rust">15 Prompts</span>
+      <span class="badge badge-gold">Any AI Platform</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <div class="intro">
+    <strong>How to use:</strong> Select options from each section below. Your custom prompt assembles automatically in the result box at the bottom. Copy it and paste into <strong>ChatGPT, Claude, Gemini, Copilot, or any AI tool</strong> — no subscription required beyond a free account.
+  </div>
+
+  <div class="presets-row">
+    <div class="presets-label">Quick-Start Presets</div>
+    <div class="presets-list">
+      <button class="preset-btn" onclick="loadPreset('new-seller')">🌱 New Seller</button>
+      <button class="preset-btn" onclick="loadPreset('digital-product')">📄 Digital Product</button>
+      <button class="preset-btn" onclick="loadPreset('handmade-gift')">🎁 Handmade Gift</button>
+      <button class="preset-btn" onclick="loadPreset('holiday-season')">🎄 Holiday Season</button>
+      <button class="preset-btn" onclick="loadPreset('vintage-item')">🕰️ Vintage Item</button>
+      <button class="preset-btn" onclick="loadPreset('seo-boost')">📈 SEO Boost</button>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-header active" onclick="toggleSection(this)">
+      <div class="section-num">1</div>
+      <div class="section-icon">◈</div>
+      <div class="section-title">Listing Type</div>
+      <div class="section-chevron">▾</div>
+    </div>
+    <div class="section-body open">
+      <div class="fields">
+        <div class="field">
+          <label>Product Type</label>
+          <select id="product-type" onchange="buildPrompt()">
+            <option value="">— Choose —</option>
+            <option value="handmade physical item">Handmade Physical Item</option>
+            <option value="digital download / printable">Digital Download / Printable</option>
+            <option value="SVG cut file">SVG Cut File</option>
+            <option value="pattern or template">Pattern or Template</option>
+            <option value="vintage item">Vintage Item</option>
+            <option value="art print">Art Print</option>
+            <option value="jewelry">Jewelry</option>
+            <option value="home décor item">Home Décor Item</option>
+            <option value="planner or sticker sheet">Planner or Sticker Sheet</option>
+            <option value="ebook or guide">Ebook or Guide</option>
+            <option value="candle or soap">Candle or Soap</option>
+            <option value="clothing or accessory">Clothing or Accessory</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Your Product Name</label>
+          <input type="text" id="product-name" placeholder="e.g. Wildflower Watercolor Print" oninput="buildPrompt()">
+        </div>
+        <div class="field">
+          <label>Target Buyer</label>
+          <select id="target-buyer" onchange="buildPrompt()">
+            <option value="">— Choose —</option>
+            <option value="gift buyers">Gift Buyers</option>
+            <option value="home decorators">Home Decorators</option>
+            <option value="crafters and DIYers">Crafters and DIYers</option>
+            <option value="teachers and educators">Teachers and Educators</option>
+            <option value="small business owners">Small Business Owners</option>
+            <option value="brides and wedding planners">Brides and Wedding Planners</option>
+            <option value="parents and families">Parents and Families</option>
+            <option value="artists and creatives">Artists and Creatives</option>
+            <option value="vintage collectors">Vintage Collectors</option>
+            <option value="pet owners">Pet Owners</option>
+            <option value="self-care seekers">Self-Care Seekers</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Price Range</label>
+          <select id="price-range" onchange="buildPrompt()">
+            <option value="">— Choose —</option>
+            <option value="under $10 (impulse buy)">Under $10 — Impulse Buy</option>
+            <option value="$10–$25 (mid-range)">$10–$25 — Mid-Range</option>
+            <option value="$25–$50 (considered purchase)">$25–$50 — Considered Purchase</option>
+            <option value="$50+ (premium / luxury)">$50+ — Premium / Luxury</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-num">2</div>
+      <div class="section-icon">★</div>
+      <div class="section-title">What Do You Want to Improve?</div>
+      <div class="section-chevron">▾</div>
+    </div>
+    <div class="section-body">
+      <div class="fields">
+        <div class="field full">
+          <label>Primary Goal</label>
+          <select id="goal" onchange="buildPrompt()">
+            <option value="">— Choose —</option>
+            <option value="Write an SEO-optimized listing title that front-loads the primary keyword and stays under 140 characters">📌 Write an SEO Title (under 140 chars)</option>
+            <option value="Write a complete listing description with an emotional hook, bullet-point features, and a clear call to action">📝 Write a Full Listing Description</option>
+            <option value="Generate a complete set of 13 Etsy tags that mix long-tail and broad keywords, each under 20 characters">🏷️ Generate 13 Etsy Tags</option>
+            <option value="Write a shop announcement that communicates my brand personality and current offers">📣 Write a Shop Announcement</option>
+            <option value="Write a compelling shop bio that builds trust and tells my brand story in under 250 words">👤 Write a Shop Bio</option>
+            <option value="Rewrite my existing listing title and description to improve SEO and conversion — I'll paste my current version below">✏️ Rewrite / Optimize Existing Listing</option>
+            <option value="Write a description that appeals specifically to holiday and seasonal gift buyers">🎁 Write a Gift-Focused Description</option>
+            <option value="Write 5 variations of my listing title targeting different long-tail keyword phrases">🔀 Generate 5 Title Variations</option>
+          </select>
+        </div>
+        <div class="field full">
+          <label>Primary Keyword (what buyers search for)</label>
+          <input type="text" id="keyword" placeholder="e.g. watercolor flower print, handmade soy candle" oninput="buildPrompt()">
+        </div>
+        <div class="field">
+          <label>Secondary Keyword (optional)</label>
+          <input type="text" id="keyword2" placeholder="e.g. boho wall art, cottagecore gift" oninput="buildPrompt()">
+        </div>
+        <div class="field">
+          <label>Season or Occasion (optional)</label>
+          <select id="season" onchange="buildPrompt()">
+            <option value="">— None / Evergreen —</option>
+            <option value="Christmas / Holiday Season">Christmas / Holiday Season</option>
+            <option value="Valentine's Day">Valentine's Day</option>
+            <option value="Mother's Day">Mother's Day</option>
+            <option value="Father's Day">Father's Day</option>
+            <option value="Back to School">Back to School</option>
+            <option value="Spring / Easter">Spring / Easter</option>
+            <option value="Summer">Summer</option>
+            <option value="Halloween">Halloween</option>
+            <option value="Graduation Season">Graduation Season</option>
+            <option value="Wedding Season">Wedding Season</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-num">3</div>
+      <div class="section-icon">✦</div>
+      <div class="section-title">Tone & Output Format</div>
+      <div class="section-chevron">▾</div>
+    </div>
+    <div class="section-body">
+      <div class="fields">
+        <div class="field">
+          <label>Listing Tone</label>
+          <select id="tone" onchange="buildPrompt()">
+            <option value="">— Choose —</option>
+            <option value="warm and personal">Warm and Personal</option>
+            <option value="professional and clear">Professional and Clear</option>
+            <option value="playful and fun">Playful and Fun</option>
+            <option value="luxurious and refined">Luxurious and Refined</option>
+            <option value="earthy and authentic">Earthy and Authentic</option>
+            <option value="minimal and modern">Minimal and Modern</option>
+            <option value="storytelling and emotional">Storytelling and Emotional</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Output Format</label>
+          <select id="format" onchange="buildPrompt()">
+            <option value="">— Choose —</option>
+            <option value="Give me 3 versions to choose from">3 Versions to Compare</option>
+            <option value="Give me 1 polished final version">1 Polished Final Version</option>
+            <option value="Give me 5 title variations as a numbered list">5 Title Variations (numbered list)</option>
+            <option value="Give me bullet points for the key features section">Bullet Points Only</option>
+            <option value="Give me a full listing with all sections labeled">Full Listing — All Sections Labeled</option>
+          </select>
+        </div>
+        <div class="field full">
+          <label>Your Existing Listing or Extra Details (optional)</label>
+          <textarea id="existing" placeholder="Paste your current listing title / description here to rewrite it, or add any product details the AI should know..." oninput="buildPrompt()"></textarea>
+        </div>
+      </div>
+      <div class="tip-box">
+        <strong>Pro tip:</strong> The more specific your keyword and product name, the better your output. Instead of "candle" try "hand-poured soy candle with wood wick" — the AI will produce far more targeted results.
+      </div>
+    </div>
+  </div>
+
+  <div class="result-section">
+    <div class="result-header">
+      <div class="result-label">
+        <span>⚡</span> Your Assembled Prompt
+      </div>
+      <div class="platform-pills">
+        <span class="pill">ChatGPT</span>
+        <span class="pill">Claude</span>
+        <span class="pill">Gemini</span>
+        <span class="pill">Copilot</span>
+        <span class="pill">Meta AI</span>
+      </div>
+    </div>
+    <div class="result-body">
+      <div id="prompt-output">
+        <span class="placeholder">← Fill in the sections above and your prompt will appear here, ready to copy and paste into any AI platform.</span>
+      </div>
+    </div>
+    <div class="result-footer">
+      <div class="char-count" id="char-count">0 characters</div>
+      <div class="btn-row">
+        <button class="btn btn-random" onclick="randomize()">⚄ Randomize</button>
+        <button class="btn btn-reset" onclick="resetAll()">↺ Reset</button>
+        <button class="btn btn-copy" id="copy-btn" onclick="copyPrompt()">⧉ Copy Prompt</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="upgrade-banner">
+    <div class="upgrade-text">
+      <h3>Ready for more? Upgrade to the Pro Pack →</h3>
+      <p>Unlock <strong>40 prompt types</strong> including Shop Bio, Review Responses, Seasonal Campaigns, Competitor Analysis, and a Brand Voice Guide — all in the same zero-friction tool.</p>
+    </div>
+    <a href="https://forgeaistudio.etsy.com" class="btn-upgrade" target="_blank">View Pro Pack ↗</a>
+  </div>
+
+</main>
+
+<footer>
+  © ForgeAI Studio · Etsy Listing Optimizer · Tier 1 Starter · Personal &amp; Commercial Use License Included
+</footer>
+
+<div class="toast" id="toast">✓ Prompt copied to clipboard!</div>
+
+<script>
+function buildPrompt() {
+  const productType = get('product-type');
+  const productName = get('product-name');
+  const targetBuyer = get('target-buyer');
+  const priceRange  = get('price-range');
+  const goal        = get('goal');
+  const keyword     = get('keyword');
+  const keyword2    = get('keyword2');
+  const season      = get('season');
+  const tone        = get('tone');
+  const format      = get('format');
+  const existing    = get('existing');
+
+  const hasContent = goal || keyword || productType;
+  if (!hasContent) {
+    setOutput('<span class="placeholder">← Fill in the sections above and your prompt will appear here, ready to copy and paste into any AI platform.</span>');
+    updateCount(0);
+    return;
+  }
+
+  let parts = [];
+
+  if (goal) {
+    parts.push(goal);
+  } else {
+    parts.push('Write optimized Etsy listing copy');
+  }
+
+  let productCtx = [];
+  if (productName) productCtx.push(`"${productName}"`);
+  if (productType) productCtx.push(`(${productType})`);
+  if (productCtx.length) parts.push(`for ${productCtx.join(' ')}`);
+
+  let audienceCtx = [];
+  if (targetBuyer) audienceCtx.push(`targeting ${targetBuyer}`);
+  if (priceRange)  audienceCtx.push(`in the ${priceRange} range`);
+  if (audienceCtx.length) parts.push(audienceCtx.join(', '));
+
+  let kwCtx = [];
+  if (keyword)  kwCtx.push(`"${keyword}"`);
+  if (keyword2) kwCtx.push(`"${keyword2}"`);
+  if (kwCtx.length) {
+    parts.push(`The primary keyword${kwCtx.length > 1 ? 's are' : ' is'} ${kwCtx.join(' and ')}`);
+  }
+
+  if (season) parts.push(`Optimize the copy for ${season}`);
+  if (tone)   parts.push(`Use a ${tone} tone throughout`);
+  if (format) parts.push(format);
+
+  if (existing.trim()) {
+    parts.push(`\n\nHere is my existing listing content to work from:\n---\n${existing.trim()}\n---`);
+  }
+
+  let rules = [];
+  if (goal && goal.includes('title')) {
+    rules.push('Keep the title under 140 characters');
+    rules.push('Front-load the most important keyword');
+    rules.push('Avoid filler words like "beautiful" or "unique"');
+  }
+  if (goal && goal.includes('tag')) {
+    rules.push('Each tag must be under 20 characters');
+    rules.push('Include a mix of specific long-tail phrases and broader single keywords');
+    rules.push('Format as a comma-separated list');
+  }
+  if (goal && goal.includes('description')) {
+    rules.push('Open with the biggest buyer benefit — not "This is a..."');
+    rules.push('Naturally include the primary keyword within the first 40 words');
+    rules.push('Keep under 400 words unless otherwise specified');
+  }
+
+  if (rules.length) {
+    parts.push(`\n\nImportant rules:\n${rules.map(r => `• ${r}`).join('\n')}`);
+  }
+
+  const prompt = parts.join('. ').replace(/\.\s*\./g, '.').replace(/\n\./g, '\n');
+  const clean = prompt.trim();
+  const display = clean.replace(/\[([^\]]+)\]/g, '<span class="var-highlight">[$1]</span>');
+
+  setOutput(display);
+  updateCount(clean.length);
+  document.getElementById('prompt-output').dataset.raw = clean;
+}
+
+function get(id) {
+  const el = document.getElementById(id);
+  return el ? el.value.trim() : '';
+}
+
+function setOutput(html) { document.getElementById('prompt-output').innerHTML = html; }
+function updateCount(n) {
+  document.getElementById('char-count').textContent = n > 0 ? `${n} characters` : '0 characters';
+}
+
+function copyPrompt() {
+  const el = document.getElementById('prompt-output');
+  const raw = el.dataset.raw || el.innerText;
+  if (!raw || raw.includes('Fill in the sections')) return;
+
+  navigator.clipboard.writeText(raw).then(() => {
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    showToast();
+    setTimeout(() => { btn.textContent = '⧉ Copy Prompt'; btn.classList.remove('copied'); }, 2500);
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = raw;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast();
+  });
+}
+
+function showToast() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function resetAll() {
+  ['product-type','target-buyer','price-range','goal','season','tone','format']
+    .forEach(id => { document.getElementById(id).value = ''; });
+  ['product-name','keyword','keyword2','existing']
+    .forEach(id => { document.getElementById(id).value = ''; });
+  buildPrompt();
+}
+
+const RANDOM_OPTS = {
+  'product-type': ['handmade physical item','digital download / printable','art print','jewelry','home décor item','candle or soap','vintage item'],
+  'target-buyer': ['gift buyers','home decorators','crafters and DIYers','parents and families','self-care seekers','artists and creatives'],
+  'goal': [
+    'Write an SEO-optimized listing title that front-loads the primary keyword and stays under 140 characters',
+    'Write a complete listing description with an emotional hook, bullet-point features, and a clear call to action',
+    'Generate a complete set of 13 Etsy tags that mix long-tail and broad keywords, each under 20 characters',
+    'Write 5 variations of my listing title targeting different long-tail keyword phrases',
+  ],
+  'tone': ['warm and personal','playful and fun','earthy and authentic','luxurious and refined','storytelling and emotional'],
+  'format': ['Give me 3 versions to choose from','Give me 1 polished final version','Give me a full listing with all sections labeled'],
+};
+
+const RANDOM_KEYWORDS = [
+  'handmade ceramic mug','watercolor botanical print','boho macramé wall hanging',
+  'hand-poured soy candle','vintage brass candleholder','personalized leather wallet',
+  'cottagecore mushroom embroidery kit','minimalist line art print','antique milk glass vase',
+  'wildflower seed packet wedding favor',
+];
+
+function randomize() {
+  Object.entries(RANDOM_OPTS).forEach(([id, opts]) => {
+    document.getElementById(id).value = opts[Math.floor(Math.random() * opts.length)];
+  });
+  const kw = RANDOM_KEYWORDS[Math.floor(Math.random() * RANDOM_KEYWORDS.length)];
+  document.getElementById('keyword').value = kw;
+  document.getElementById('product-name').value = kw.split(' ').map(w => w[0].toUpperCase()+w.slice(1)).join(' ');
+  buildPrompt();
+}
+
+const PRESETS = {
+  'new-seller': {
+    'product-type': 'handmade physical item',
+    'target-buyer': 'gift buyers',
+    'goal': 'Write a complete listing description with an emotional hook, bullet-point features, and a clear call to action',
+    'tone': 'warm and personal',
+    'format': 'Give me 1 polished final version',
+    'keyword': 'handmade gift',
+  },
+  'digital-product': {
+    'product-type': 'digital download / printable',
+    'target-buyer': 'home decorators',
+    'goal': 'Write an SEO-optimized listing title that front-loads the primary keyword and stays under 140 characters',
+    'tone': 'professional and clear',
+    'format': 'Give me 5 title variations as a numbered list',
+    'keyword': 'printable wall art',
+    'keyword2': 'instant download',
+  },
+  'handmade-gift': {
+    'product-type': 'handmade physical item',
+    'target-buyer': 'gift buyers',
+    'goal': 'Write a complete listing description with an emotional hook, bullet-point features, and a clear call to action',
+    'tone': 'storytelling and emotional',
+    'format': 'Give me 1 polished final version',
+    'keyword': 'unique handmade gift',
+    'price-range': '$25–$50 (considered purchase)',
+  },
+  'holiday-season': {
+    'product-type': 'handmade physical item',
+    'target-buyer': 'gift buyers',
+    'goal': 'Write a description that appeals specifically to holiday and seasonal gift buyers',
+    'tone': 'warm and personal',
+    'format': 'Give me 1 polished final version',
+    'keyword': 'Christmas gift',
+    'season': 'Christmas / Holiday Season',
+  },
+  'vintage-item': {
+    'product-type': 'vintage item',
+    'target-buyer': 'vintage collectors',
+    'goal': 'Write a complete listing description with an emotional hook, bullet-point features, and a clear call to action',
+    'tone': 'storytelling and emotional',
+    'format': 'Give me 1 polished final version',
+    'keyword': 'vintage collectible',
+  },
+  'seo-boost': {
+    'product-type': 'handmade physical item',
+    'goal': 'Generate a complete set of 13 Etsy tags that mix long-tail and broad keywords, each under 20 characters',
+    'tone': 'professional and clear',
+    'format': 'Give me bullet points for the key features section',
+    'keyword': 'handmade home decor',
+  },
+};
+
+function loadPreset(key) {
+  resetAll();
+  const p = PRESETS[key];
+  if (!p) return;
+  Object.entries(p).forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    if (el) el.value = val;
+  });
+  document.querySelectorAll('.section-body').forEach(b => b.classList.add('open'));
+  document.querySelectorAll('.section-header').forEach(h => h.classList.add('active'));
+  buildPrompt();
+}
+
+function toggleSection(header) {
+  const body = header.nextElementSibling;
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  header.classList.toggle('active', !isOpen);
+}
+
+buildPrompt();
+</script>
+</body>
+</html>
